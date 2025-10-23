@@ -32,7 +32,7 @@ if (!particlesContainer) {
     particle.style.pointerEvents = 'none';
     particle.style.zIndex = '-1';
 
-    const size = Math.random() * 120 + 90;
+    const size = Math.random() * 1020 + 90;
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
 
@@ -61,3 +61,4 @@ if (!particlesContainer) {
     });
   }
 }
+

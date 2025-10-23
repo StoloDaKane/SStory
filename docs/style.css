@@ -4,70 +4,89 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   background-color: #0a0a0a;
-  color: white;
+  color: #f0f0f0;
   font-family: Roboto, sans-serif;
   overflow: hidden;
-  height: 100vh;
   position: relative;
 }
-/*Фон*/
+
 #particles {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -2;
 }
+
+
+.glass-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.25); 
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 
 header {
   height: 33.33vh;
-  background: rgba(30, 30, 30, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 100%;
 }
 
 header h1 {
-  font-size: 3rem;
-  letter-spacing: 2px;
+  font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-align: center;
+  color: white;
 }
 
 .hamburger {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 24px;
+  left: 24px;
   background: none;
   border: none;
   color: white;
   font-size: 1.8rem;
   cursor: pointer;
-  z-index: 10;
+  opacity: 0.9;
+  transition: opacity 0.2s;
 }
 
-/*Боковое меню*/
+.hamburger:hover {
+  opacity: 1;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
   left: -280px;
   width: 260px;
   height: 100vh;
-  background: rgba(20, 20, 20, 0.35);
+  background: rgba(15, 15, 15, 0.35);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-right: 1px solid rgba(255, 255, 255, 0.07);
-  padding-top: 80px;
-  transition: left 0.4s ease;
-  z-index: 9;
+  padding-top: 90px;
+  transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 10;
 }
 
 .sidebar.open {
@@ -79,29 +98,35 @@ header h1 {
 }
 
 .sidebar li {
-  padding: 16px 24px;
+  padding: 16px 28px;
 }
 
 .sidebar a {
   color: white;
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 500;
   transition: opacity 0.2s;
 }
 
 .sidebar a:hover {
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-/*Основной контент */
 main {
   padding: 40px;
-  margin-top: 20px;
-  background: rgba(15, 15, 15, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   margin: 20px auto;
   max-width: 800px;
-  border-radius: 12px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2.4rem;
+  }
+  main {
+    margin: 20px 16px;
+    padding: 24px;
+  }
 }

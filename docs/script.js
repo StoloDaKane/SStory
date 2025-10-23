@@ -1,17 +1,18 @@
-// Частицы
+// Фон
 const particlesContainer = document.getElementById('particles');
-const particleCount = 12;
+const particleCount = 14; 
 
 for (let i = 0; i < particleCount; i++) {
   const particle = document.createElement('div');
   particle.style.position = 'absolute';
   particle.style.borderRadius = '50%';
-  particle.style.backgroundColor = 'rgba(255, 0, 0, 0.05)';
+  particle.style.backgroundColor = 'rgba(255, 0, 0, 0.05)'; 
   particle.style.pointerEvents = 'none';
+  particle.style.zIndex = '-1';
 
-  const size = Math.random() * 80 + 40;
-  particle.style.width = `${size}px`;
-  particle.style.height = `${size}px`;
+  const baseSize = Math.random() * 100 + 80;
+  particle.style.width = `${baseSize}px`;
+  particle.style.height = `${baseSize}px`;
 
   const startX = Math.random() * window.innerWidth;
   const startY = Math.random() * window.innerHeight;
@@ -20,42 +21,38 @@ for (let i = 0; i < particleCount; i++) {
 
   particlesContainer.appendChild(particle);
 
-  animateParticle(particle);
+  animateParticle(particle, baseSize);
 }
 
-function animateParticle(el) {
-  const duration = Math.random() * 20 + 15; // 15–35 сек
-  const delay = Math.random() * 5;
-  const scaleMin = 0.3;
-  const scaleMax = 1.2;
-
+function animateParticle(el, baseSize) {
   const keyframes = [
-    { transform: `translate(0, 0) scale(${scaleMin})`, opacity: 0.05 },
-    { transform: `translate(${(Math.random() - 0.5) * 300}px, ${(Math.random() - 0.5) * 300}px) scale(${scaleMax})`, opacity: 0.05 },
-    { transform: `translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px) scale(${(scaleMin + scaleMax) / 2})`, opacity: 0.05 },
-    { transform: `translate(0, 0) scale(${scaleMin})`, opacity: 0.05 }
+    { transform: `scale(${0.7})` },
+    { transform: `scale(${1.3})` },
+    { transform: `scale(${0.7})` }
   ];
 
-  const options = {
-    duration: duration * 1000,
+  const pulseDuration = 4 + Math.random() * 6;
+
+  el.animate(keyframes, {
+    duration: pulseDuration * 1000,
     iterations: Infinity,
     easing: 'ease-in-out',
-    delay: delay * 1000
-  };
+    direction: 'alternate'
+  });
 
-  el.animate(keyframes, options);
+  const driftDuration = 25 + Math.random() * 30; 
+  const endX = (Math.random() - 0.5) * window.innerWidth * 0.6;
+  const endY = (Math.random() - 0.5) * window.innerHeight * 0.6;
+
+  const driftKeyframes = [
+    { transform: `translate(0, 0) scale(${0.7 + Math.random() * 0.6})` },
+    { transform: `translate(${endX}px, ${endY}px) scale(${0.7 + Math.random() * 0.6})` }
+  ];
+
+  el.animate(driftKeyframes, {
+    duration: driftDuration * 1000,
+    iterations: Infinity,
+    easing: 'ease-in-out',
+    direction: 'alternate'
+  });
 }
-
-// Переключение меню
-document.querySelector('.hamburger').addEventListener('click', () => {
-  document.getElementById('sidebar').classList.toggle('open');
-});
-
-// Закрытие меню при клике вне его
-document.addEventListener('click', (e) => {
-  const sidebar = document.getElementById('sidebar');
-  const hamburger = document.querySelector('.hamburger');
-  if (!sidebar.contains(e.target) && !hamburger.contains(e.target) && sidebar.classList.contains('open')) {
-    sidebar.classList.remove('open');
-  }
-});

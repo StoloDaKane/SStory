@@ -1,18 +1,20 @@
-// Фон
+
+document.getElementById('particles').innerHTML = '';
+
 const particlesContainer = document.getElementById('particles');
-const particleCount = 14; 
+const particleCount = 16;
 
 for (let i = 0; i < particleCount; i++) {
   const particle = document.createElement('div');
   particle.style.position = 'absolute';
   particle.style.borderRadius = '50%';
-  particle.style.backgroundColor = 'rgba(255, 0, 0, 0.05)'; 
+  particle.style.backgroundColor = 'rgba(255, 0, 0, 0.05)';
   particle.style.pointerEvents = 'none';
   particle.style.zIndex = '-1';
 
-  const baseSize = Math.random() * 100 + 80;
-  particle.style.width = `${baseSize}px`;
-  particle.style.height = `${baseSize}px`;
+  const size = Math.random() * 120 + 90;
+  particle.style.width = `${size}px`;
+  particle.style.height = `${size}px`;
 
   const startX = Math.random() * window.innerWidth;
   const startY = Math.random() * window.innerHeight;
@@ -20,39 +22,35 @@ for (let i = 0; i < particleCount; i++) {
   particle.style.top = `${startY}px`;
 
   particlesContainer.appendChild(particle);
-
-  animateParticle(particle, baseSize);
+  animateParticle(particle, size);
 }
 
 function animateParticle(el, baseSize) {
-  const keyframes = [
-    { transform: `scale(${0.7})` },
-    { transform: `scale(${1.3})` },
-    { transform: `scale(${0.7})` }
-  ];
+  const points = 5;
+  const keyframes = [];
 
-  const pulseDuration = 4 + Math.random() * 6;
+  for (let i = 0; i <= points; i++) {
+    const progress = i / points;
+    const x = (Math.sin(progress * Math.PI * 2 + Math.random() * 10) * 0.4 * window.innerWidth);
+    const y = (Math.cos(progress * Math.PI * 1.5 + Math.random() * 8) * 0.4 * window.innerHeight);
+    const scale = 0.7 + Math.sin(progress * Math.PI * 2) * 0.3; // пульсация
 
-  el.animate(keyframes, {
-    duration: pulseDuration * 1000,
-    iterations: Infinity,
-    easing: 'ease-in-out',
-    direction: 'alternate'
+    keyframes.push({
+      transform: `translate(${x}px, ${y}px) scale(${scale})`,
+      offset: progress
+    });
+  }
+  
+  keyframes.push({
+    transform: keyframes[0].transform,
+    offset: 1
   });
 
-  const driftDuration = 25 + Math.random() * 30; 
-  const endX = (Math.random() - 0.5) * window.innerWidth * 0.6;
-  const endY = (Math.random() - 0.5) * window.innerHeight * 0.6;
+  const duration = 30 + Math.random() * 40;
 
-  const driftKeyframes = [
-    { transform: `translate(0, 0) scale(${0.7 + Math.random() * 0.6})` },
-    { transform: `translate(${endX}px, ${endY}px) scale(${0.7 + Math.random() * 0.6})` }
-  ];
-
-  el.animate(driftKeyframes, {
-    duration: driftDuration * 1000,
+  el.animate(keyframes, {
+    duration: duration * 1000,
     iterations: Infinity,
-    easing: 'ease-in-out',
-    direction: 'alternate'
+    easing: 'ease-in-out'
   });
 }

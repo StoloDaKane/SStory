@@ -4,15 +4,12 @@
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100%;
-}
-
 body {
   background-color: #0a0a0a;
   color: #f0f0f0;
-  font-family: Roboto, sans-serif;
+  font-family: 'Manrope', sans-serif;
   overflow: hidden;
+  height: 100vh;
   position: relative;
 }
 
@@ -22,38 +19,29 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -2;
+  z-index: -1;
+  pointer-events: none;
 }
-
-
-.glass-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(10, 10, 10, 0.25); 
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-}
-
 
 header {
   height: 33.33vh;
+  background: rgba(15, 15, 15, 0.22);
+  backdrop-filter: blur(22px); 
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
+  width: 100%;
+  z-index: 10;
 }
 
 header h1 {
   font-size: 3.2rem;
   font-weight: 700;
   letter-spacing: 1px;
-  text-align: center;
   color: white;
 }
 
@@ -67,12 +55,9 @@ header h1 {
   font-size: 1.8rem;
   cursor: pointer;
   opacity: 0.9;
-  transition: opacity 0.2s;
+  z-index: 11;
 }
 
-.hamburger:hover {
-  opacity: 1;
-}
 
 .sidebar {
   position: fixed;
@@ -80,13 +65,13 @@ header h1 {
   left: -280px;
   width: 260px;
   height: 100vh;
-  background: rgba(15, 15, 15, 0.35);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(12, 12, 12, 0.28);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   border-right: 1px solid rgba(255, 255, 255, 0.07);
   padding-top: 90px;
   transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 10;
+  z-index: 9;
 }
 
 .sidebar.open {
@@ -117,16 +102,19 @@ main {
   padding: 40px;
   margin: 20px auto;
   max-width: 800px;
+  background: rgba(10, 10, 10, 0.25);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
   font-size: 1.1rem;
   line-height: 1.6;
+  z-index: 5;
+  position: relative;
 }
 
+
 @media (max-width: 768px) {
-  header h1 {
-    font-size: 2.4rem;
-  }
-  main {
-    margin: 20px 16px;
-    padding: 24px;
-  }
+  header h1 { font-size: 2.4rem; }
+  main { margin: 20px 16px; padding: 24px; }
 }

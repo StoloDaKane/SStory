@@ -1,64 +1,57 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <link rel="icon" type="image/png" href="../assets/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Галерея</title>
+  <title>Галерея — SSquadra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css" />
   <style>
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 18px;
-      padding: 0 20px 30px;
+    /* === Основной контейнер галереи === */
+    .masonry-gallery {
+      column-count: 1;
+      column-gap: 16px;
+      padding: 0 16px 30px;
     }
 
+    @media (min-width: 600px) {
+      .masonry-gallery {
+        column-count: 2;
+      }
+    }
 
-    .gallery-item {
+    @media (min-width: 900px) {
+      .masonry-gallery {
+        column-count: 3;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .masonry-gallery {
+        column-count: 4;
+      }
+    }
+
+    /* === Элемент галереи === */
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+    }
+
+    .masonry-item img {
       width: 100%;
       height: auto;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      position: relative;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-      transition: transform 0.2s ease;
-      background: #000;
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
       display: block;
-      pointer-events: none;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
-
-
-    .light-effect,
-    .darken-effect {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.1s ease;
-    }
-
-
-    .gallery-item:nth-child(4n+1) { grid-row: span 2; }
-    .gallery-item:nth-child(4n+3) { grid-row: span 3; }
   </style>
 </head>
+
 <body>
   <div id="particles"></div>
 
@@ -75,25 +68,29 @@
       <li><a href="#">4</a></li>
     </ul>
   </nav>
+
+  <!-- Описание -->
   <div class="glass-block">
     <p>Здесь будут крути фотокаточки</p>
   </div>
-  <div class="glass-block">
-    <div class="gallery-grid" id="gallery"></div>
-  </div>
 
+  <!-- Галерея -->
+  <div class="masonry-gallery" id="gallery"></div>
 
   <div class="bottom-glass-fade"></div>
 
   <script src="../script.js"></script>
   <script>
-
+    // === Загрузка изображений ===
     const gallery = document.getElementById('gallery');
     const maxImages = 50;
 
     for (let i = 1; i <= maxImages; i++) {
-      const container = document.createElement('div');
-      container.className = 'gallery-item';
+      const item = document.createElement('div');
+      item.className = 'masonry-item';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'image-wrapper';
 
       const img = document.createElement('img');
       img.src = `${i}.png`;
@@ -106,34 +103,62 @@
       const darkenEffect = document.createElement('div');
       darkenEffect.className = 'darken-effect';
 
-      container.appendChild(img);
-      container.appendChild(lightEffect);
-      container.appendChild(darkenEffect);
-      gallery.appendChild(container);
+      wrapper.appendChild(img);
+      wrapper.appendChild(lightEffect);
+      wrapper.appendChild(darkenEffect);
+      item.appendChild(wrapper);
+      gallery.appendChild(item);
 
-
-      img.onerror = () => container.remove();
+      img.onerror = () => item.remove();
     }
 
-
+    // === ЭФФЕКТ НАВЕДЕНИЯ ===
     let ticking = false;
 
-    document.querySelectorAll('.gallery-item').forEach(item => {
-      const lightEffect = item.querySelector('.light-effect');
-      const darkenEffect = item.querySelector('.darken-effect');
+    document.querySelectorAll('.image-wrapper').forEach(wrapper => {
+      const img = wrapper.querySelector('img');
+      const lightEffect = wrapper.querySelector('.light-effect');
+      const darkenEffect = wrapper.querySelector('.darken-effect');
       let isHovered = false;
 
-      item.addEventListener('mouseenter', () => {
+      // Устанавливаем начальные стили для wrapper
+      wrapper.style.position = 'relative';
+      wrapper.style.transformStyle = 'preserve-3d';
+      wrapper.style.perspective = '1000px';
+      wrapper.style.transition = 'transform 0.2s ease';
+      wrapper.style.borderRadius = '12px';
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.25)';
+
+      lightEffect.style.cssText = `
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.5), transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s ease;
+    `;
+
+      darkenEffect.style.cssText = `
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s ease;
+    `;
+
+      wrapper.addEventListener('mouseenter', () => {
         isHovered = true;
-        item.style.transition = 'transform 0.1s ease';
-        item.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(30px) scale(1.05)';
+        wrapper.style.transition = 'transform 0.1s ease';
+        wrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(20px) scale(1.03)';
       });
 
-      item.addEventListener('mousemove', (e) => {
+      wrapper.addEventListener('mousemove', (e) => {
         if (!isHovered) return;
         if (!ticking) {
           window.requestAnimationFrame(() => {
-            const rect = item.getBoundingClientRect();
+            const rect = wrapper.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
@@ -142,10 +167,10 @@
 
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = -(y - centerY) / 6;
-            const rotateY = -(centerX - x) / 6;
+            const rotateX = -(y - centerY) / 12;
+            const rotateY = -(centerX - x) / 12;
 
-            item.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px) scale(1.05)`;
+            wrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px) scale(1.03)`;
 
             if (rotateX > 0) {
               lightEffect.style.opacity = Math.min(rotateX / 30, 0.4);
@@ -160,18 +185,15 @@
         }
       });
 
-      item.addEventListener('mouseleave', () => {
+      wrapper.addEventListener('mouseleave', () => {
         isHovered = false;
-        item.style.transition = 'transform 0.2s ease';
-        item.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0) scale(1)';
+        wrapper.style.transition = 'transform 0.2s ease';
+        wrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0) scale(1)';
         lightEffect.style.opacity = 0;
         darkenEffect.style.opacity = 0;
       });
     });
   </script>
 </body>
+
 </html>
-
-
-
-

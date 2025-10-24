@@ -5,8 +5,8 @@
 }
 
 body {
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
+/*  -ms-overflow-style: none; 
+  scrollbar-width: none; */
   background-color: #0a0a0a;
   color: #f0f0f0;
   font-family: 'Manrope', sans-serif;
@@ -15,9 +15,9 @@ body {
   position: relative;
 }
 
-body::-webkit-scrollbar {
+/*body::-webkit-scrollbar {
   display: none;
-}
+}*/
 
 #particles {
   position: fixed;

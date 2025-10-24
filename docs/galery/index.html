@@ -5,13 +5,13 @@
   <link rel="icon" type="image/png" href="../assets/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Галерея SSquadra</title>
+  <title>Галерея — SSquadra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css" />
   <style>
-    /* === Основной контейнер галереи === */
+
     .masonry-gallery {
       column-count: 1;
       column-gap: 16px;
@@ -36,7 +36,7 @@
       }
     }
 
-    /* === Элемент галереи === */
+
     .masonry-item {
       break-inside: avoid;
       margin-bottom: 16px;
@@ -69,19 +69,19 @@
     </ul>
   </nav>
 
-  <!-- Описание -->
+
   <div class="glass-block">
     <p>Здесь будут крути фотокаточки</p>
   </div>
 
-  <!-- Галерея -->
+
   <div class="masonry-gallery" id="gallery"></div>
 
   <div class="bottom-glass-fade"></div>
 
   <script src="../script.js"></script>
   <script>
-    // === Загрузка изображений ===
+
     const gallery = document.getElementById('gallery');
     const maxImages = 50;
 
@@ -112,7 +112,6 @@
       img.onerror = () => item.remove();
     }
 
-    // === ЭФФЕКТ НАВЕДЕНИЯ ===
     let ticking = false;
 
     document.querySelectorAll('.image-wrapper').forEach(wrapper => {
@@ -121,7 +120,6 @@
       const darkenEffect = wrapper.querySelector('.darken-effect');
       let isHovered = false;
 
-      // Устанавливаем начальные стили для wrapper
       wrapper.style.position = 'relative';
       wrapper.style.transformStyle = 'preserve-3d';
       wrapper.style.perspective = '1000px';
@@ -197,4 +195,3 @@
 </body>
 
 </html>
-

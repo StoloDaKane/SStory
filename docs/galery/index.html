@@ -1,50 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-    <link rel="icon" type="image/png" href="../assets/favicon.png">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SSquadra</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Галерея</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+      padding: 0 20px 30px;
+    }
+
+
+    .gallery-item {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: transform 0.2s ease;
+      background: #000;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+
+    .light-effect,
+    .darken-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+
+
+    .gallery-item:nth-child(4n+1) { grid-row: span 2; }
+    .gallery-item:nth-child(4n+3) { grid-row: span 3; }
+  </style>
 </head>
-
 <body>
+  <div id="particles"></div>
 
-    <div id="particles"></div>
+  <header>
+    <button class="hamburger" aria-label="Меню">☰</button>
+    <h1>Галерея</h1>
+  </header>
 
-    <header>
-        <button class="hamburger" aria-label="Меню">☰</button>
-        <h1>Галерея</h1>
-    </header>
+  <nav class="sidebar" id="sidebar">
+    <ul>
+      <li><a href="/SSwiki/">Главная</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+    </ul>
+  </nav>
 
-    <nav class="sidebar" id="sidebar">
-        <ul>
-            <li><a href="/SSwiki/">Главная</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-        </ul>
-    </nav>
+  <main>
+    <p>Здесь будут крути фотокаточки</p>
+    <div class="gallery-grid" id="gallery"></div>
+  </main>
 
-    <main>
-        <p>Здесь будут крути фотокаточки</p>
-    </main>
+  <div class="bottom-glass-fade"></div>
 
-    <script src="../script.js"></script>
-    <div class="bottom-glass-fade"></div>
+  <script src="../script.js"></script>
+  <script>
+
+    const gallery = document.getElementById('gallery');
+    const maxImages = 50;
+
+    for (let i = 1; i <= maxImages; i++) {
+      const container = document.createElement('div');
+      container.className = 'gallery-item';
+
+      const img = document.createElement('img');
+      img.src = `${i}.png`;
+      img.alt = `Изображение ${i}`;
+      img.loading = 'lazy';
+
+      const lightEffect = document.createElement('div');
+      lightEffect.className = 'light-effect';
+
+      const darkenEffect = document.createElement('div');
+      darkenEffect.className = 'darken-effect';
+
+      container.appendChild(img);
+      container.appendChild(lightEffect);
+      container.appendChild(darkenEffect);
+      gallery.appendChild(container);
+
+
+      img.onerror = () => container.remove();
+    }
+
+
+    let ticking = false;
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      const lightEffect = item.querySelector('.light-effect');
+      const darkenEffect = item.querySelector('.darken-effect');
+      let isHovered = false;
+
+      item.addEventListener('mouseenter', () => {
+        isHovered = true;
+        item.style.transition = 'transform 0.1s ease';
+        item.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(30px) scale(1.05)';
+      });
+
+      item.addEventListener('mousemove', (e) => {
+        if (!isHovered) return;
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const rect = item.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            lightEffect.style.setProperty('--x', `${x}px`);
+            lightEffect.style.setProperty('--y', `${y}px`);
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = -(y - centerY) / 6;
+            const rotateY = -(centerX - x) / 6;
+
+            item.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px) scale(1.05)`;
+
+            if (rotateX > 0) {
+              lightEffect.style.opacity = Math.min(rotateX / 30, 0.4);
+              darkenEffect.style.opacity = 0;
+            } else {
+              darkenEffect.style.opacity = Math.min(Math.abs(rotateX) / 30, 0.3);
+              lightEffect.style.opacity = 0;
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+
+      item.addEventListener('mouseleave', () => {
+        isHovered = false;
+        item.style.transition = 'transform 0.2s ease';
+        item.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0) scale(1)';
+        lightEffect.style.opacity = 0;
+        darkenEffect.style.opacity = 0;
+      });
+    });
+  </script>
 </body>
-
-
 </html>
-
-
-
-
-
-
-
-

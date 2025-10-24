@@ -15,9 +15,9 @@ body {
   position: relative;
 }
 
-/*body::-webkit-scrollbar {
-  display: none;
-}*/
+::-webkit-scrollbar {
+    display: none;
+}
 
 #particles {
   position: fixed;

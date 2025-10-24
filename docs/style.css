@@ -114,6 +114,24 @@ main {
   position: relative;
 }
 
+.content-block {
+  background: rgba(10, 10, 10, 0.25);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 30px;
+  margin: 20px auto;
+  max-width: 1000px;
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.content-block + .content-block {
+  margin-top: 24px;
+}
+
 .bottom-glass-fade {
   position: fixed;
   top: 0;

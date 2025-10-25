@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../image.css" />
   <style>
     .masonry-gallery {
       column-count: 1;
@@ -48,58 +49,6 @@
       border-radius: 12px;
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
-
-
-    #lightbox-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 9999;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-
-    #lightbox-overlay.active {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    #lightbox {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.9);
-      opacity: 0;
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
-
-    #lightbox.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(-50%, -50%) scale(1);
-      pointer-events: auto;
-    }
-
-    #lightbox img {
-      max-width: 95vw;
-      max-height: 90vh;
-      width: auto;
-      height: auto;
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-      object-fit: contain;
-      transform: scale(1);
-      transition: transform 0.3s ease;
-    }
   </style>
 </head>
 
@@ -122,7 +71,8 @@
 
 
   <div class="glass-block">
-    <p>Крутые фотокарточки за почти всю историю существования клана SSquadra и специально отобранные для этого великолепного веб-сайта</p>
+    <p>Крутые фотокарточки за почти всю историю существования клана SSquadra и специально отобранные для этого
+      великолепного веб-сайта</p>
   </div>
 
 
@@ -165,123 +115,9 @@
 
       img.onerror = () => item.remove();
     }
-
-    // === ЭФФЕКТ НАВЕДЕНИЯ ===
-    let ticking = false;
-
-    document.querySelectorAll('.image-wrapper').forEach(wrapper => {
-      const img = wrapper.querySelector('img');
-      const lightEffect = wrapper.querySelector('.light-effect');
-      const darkenEffect = wrapper.querySelector('.darken-effect');
-      let isHovered = false;
-
-      wrapper.style.position = 'relative';
-      wrapper.style.transformStyle = 'preserve-3d';
-      wrapper.style.perspective = '1000px';
-      wrapper.style.transition = 'transform 0.2s ease';
-      wrapper.style.borderRadius = '12px';
-      wrapper.style.overflow = 'hidden';
-      wrapper.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.25)';
-
-      lightEffect.style.cssText = `
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.5), transparent 70%);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.01s ease;
-    `;
-
-      darkenEffect.style.cssText = `
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(30,0,0,0.5);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.01s ease;
-    `;
-
-      wrapper.addEventListener('mouseenter', () => {
-        isHovered = true;
-        wrapper.style.transition = 'transform 0.1s ease';
-        wrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(20px) scale(1.03)';
-      });
-
-      wrapper.addEventListener('mousemove', (e) => {
-        if (!isHovered) return;
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const rect = wrapper.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            lightEffect.style.setProperty('--x', `${x}px`);
-            lightEffect.style.setProperty('--y', `${y}px`);
-
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = -(y - centerY) / 12;
-            const rotateY = -(centerX - x) / 12;
-
-            wrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px) scale(1.03)`;
-
-            if (rotateX > 0) {
-              lightEffect.style.opacity = Math.min(rotateX / 30, 0.4);
-              darkenEffect.style.opacity = 0;
-            } else {
-              darkenEffect.style.opacity = Math.min(Math.abs(rotateX) / 30, 0.3);
-              lightEffect.style.opacity = 0;
-            }
-            ticking = false;
-          });
-          ticking = true;
-        }
-      });
-
-      wrapper.addEventListener('mouseleave', () => {
-        isHovered = false;
-        wrapper.style.transition = 'transform 0.3s ease';
-        wrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0) scale(1)';
-        lightEffect.style.opacity = 0;
-        darkenEffect.style.opacity = 0;
-      });
-    });
-
-    // Открытие модалки
-    document.querySelectorAll('.image-wrapper').forEach(wrapper => {
-      wrapper.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const img = wrapper.querySelector('img');
-        document.getElementById('lightbox-img').src = img.src;
-        document.getElementById('lightbox-overlay').classList.add('active');
-        document.getElementById('lightbox').classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-
-    // Закрытие
-    function closeLightbox() {
-      document.getElementById('lightbox-overlay').classList.remove('active');
-      document.getElementById('lightbox').classList.remove('active'); // ← добавьте это!
-      document.body.style.overflow = '';
-    }
-
-    // Просто назначаем обработчик — DOM уже готов!
-    const overlay = document.getElementById('lightbox-overlay');
-    if (overlay) {
-      overlay.addEventListener('click', closeLightbox);
-    }
-
-    // Esc
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-    });
   </script>
+  <script src="../image.js"></script>
 
 </body>
 
 </html>
-
-
-
-

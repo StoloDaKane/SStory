@@ -1,100 +1,89 @@
-
 .image-wrapper {
-  position: relative;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  transition: transform 0.2s ease;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.2s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
 }
 
 .image-wrapper img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
 }
 
 .light-effect,
 .darken-effect {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  transition: opacity 0.01s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transition: opacity 0.01s ease;
 }
 
 .light-effect {
-  background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.5), transparent 70%);
-  opacity: 0;
+    background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.5), transparent 70%);
+    opacity: 0;
 }
 
 .darken-effect {
-  background: rgba(30, 0, 0, 0.5);
-  opacity: 0;
+    background: rgba(30, 0, 0, 0.5);
+    opacity: 0;
 }
 
-/* === Lightbox Modal === */
 #lightbox-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 9999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s;
-  pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+    pointer-events: none;
 }
 
 #lightbox-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 #lightbox {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  opacity: 0;
-  visibility: hidden;
-  width: fit-content;
-  height: fit-content;
-  max-width: 70vw;
-  max-height: 85vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 16px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-  transition: all 0.3s ease;
-  pointer-events: none;
-  z-index: 10000;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
 }
 
 #lightbox.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
-  pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
 }
 
 #lightbox img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  border-radius: 12px;
+    max-width: 95vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+    transform: scale(1);
+    transition: transform 0.3s ease;
 }
